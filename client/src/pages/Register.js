@@ -1,13 +1,17 @@
-import React,{useState} from "react";
+import React,{useState,useContext} from "react";
 import Input from "../components/input";
 import Button from "../components/Button";
 import axios from "axios"
 import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context";
 
-const Register =({history})=>{
-    const [name,setName] = useState("Onkar");
-    const [password,setPassword] = useState("Pass@123");
-    const [email,setEmail] = useState("Onkar@gmail.com");
+const Register =()=>{
+    const [name,setName] = useState("");
+    const [password,setPassword] = useState("");
+    const [email,setEmail] = useState("");
+    const[state,setState] = useContext(UserContext);
+    const navigate = useNavigate();
     const handleClick = async (e)=>{
         // console.log(name,email,password);
         try{
@@ -22,8 +26,11 @@ const Register =({history})=>{
                 setName("");
                 setPassword("");
                 setEmail("");
+                setState(data);
                 toast.success('Registration successfull');
-                history.push("/login");
+                localStorage.setItem('auth',JSON.stringify(data));
+                navigate("/");
+                
             }
 
 

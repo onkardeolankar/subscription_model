@@ -1,14 +1,38 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React,{useContext} from "react";
+import { Link, useNavigate,useState } from "react-router-dom";
+import {isAuth} from "../utis/functions";
+import { UserContext } from "../context";
+
+
+
 const Nav = () => {
+const[state,setState] = useContext(UserContext);
+const navigate=useNavigate();
+
+	const logout =()=>{
+		setState({user:{}, token: ""});
+		localStorage.removeItem('auth');
+		navigate('/login');
+	}
+
 	return (
-		<ul className="nav nav-pills">
+		<ul className="nav border">
 			<li className="nav-item">
 				<Link className="nav-link active" aria-current="page" to="/">
 					Home
 				</Link>
 			</li>
-			<li className="nav-item">
+			{state && state.token ? (
+				<>
+				<li className="nav-item">
+				<span onClick={logout} className="nav-link">
+					Logout
+				</span>
+			</li>
+				</>
+				): (
+					<> 
+					<li className="nav-item">
 				<Link className="nav-link" to="/register">
 					Sign Up
 				</Link>
@@ -18,6 +42,10 @@ const Nav = () => {
 					Login
 				</Link>
 			</li>
+					</>
+				)
+			}
+			
 		</ul>
 	);
 };

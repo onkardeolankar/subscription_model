@@ -1,26 +1,34 @@
-import React,{useState} from "react";
+import React,{useState,useContext} from "react";
 import Input from "../components/input";
 import Button from "../components/Button";
 import axios from "axios"
 import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context";
 
-const Login =({history})=>{
+const Login =()=>{
     const [password,setPassword] = useState("");
     const [email,setEmail] = useState("");
+    const[state,setState] = useContext(UserContext);
+    const navigate = useNavigate();
     const handleClick = async (e)=>{
-        // console.log(name,email,password);
+        console.log(email,password);
         try{
             e.preventDefault();
             const {data} = await axios.post("http://localhost:8000/api/login",{
-                password,email
-            });
+                email,password
+            },
+            );
 
             if(data.error){
                 toast.error(data.error);
             }else{
-                setPassword("");
                 setEmail("");
-                history.push("/");
+                setPassword("");
+                setState(data);
+                // history.push("/");
+                localStorage.setItem('auth',JSON.stringify(data));
+                navigate("/");
             }
 
 
@@ -36,10 +44,10 @@ const Login =({history})=>{
                     <h1 className="pt-5 fw-bold">Login</h1>
                     <p className="lead pb-4">Access your subscriptions anytime anywhere</p>
                     <div className="form-label">
-                        <Input label="Password" type="password" value={password} setValue={setPassword} />
                         <Input label="Email" type="text" value={email} setValue={setEmail} />
+                        <Input label="Password" type="password" value={password} setValue={setPassword} /> 
                         <div className="d-grid">
-                        <Button handleClick={handleClick} type="danger" text="Register" size="sm"/>
+                        <Button handleClick={handleClick} type="danger" text="Login" size="sm"/>
                         </div>
                         
                     </div>

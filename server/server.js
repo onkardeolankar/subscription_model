@@ -25,9 +25,9 @@ const corsOptions ={
   app.use(cors(corsOptions));
 
 //db
-mongoose.connect(process.env.DATABASE)
-.then(()=>console.log("Db Connected"))
-.catch((err)=> console.log("Error found",err));
+// mongoose.connect(process.env.DATABASE)
+// .then(()=>console.log("Db Connected"))
+// .catch((err)=> console.log("Error found",err));
 
 
 //middlewares
