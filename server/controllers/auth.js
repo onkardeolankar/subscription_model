@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 // import { reset } from 'nodemon';
 const reset = require('nodemon');
 const { hashPassword,comparePassword, hashedPassword, createToken,validateToken} = require('../helpers/auth');
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 mongoose.connect(dbUrl);
 
 
@@ -56,6 +57,10 @@ let resgister = async (req,res)=>{
               statusCode:400,
               message:"User Already Exists"
             })
+
+            const stripe = await stripe.customers.create({
+              email,
+            });
           }
           else
           {
@@ -66,7 +71,8 @@ let resgister = async (req,res)=>{
               statusCode:200,
               message:"User Creation Successfull!",
               user,
-              token
+              token,
+              stripe_customer_id: customer.id,
             })
           }
     

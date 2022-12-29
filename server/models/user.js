@@ -20,7 +20,9 @@ const userSchema = new Schema({
         min: 6,
         max:64,
     },
-})
+    stripe_customer_id: String,
+    subscriptions: [],
+});
 
 let usersModel = mongoose.model("User",userSchema);
 module.exports={mongoose,usersModel}
