@@ -7,7 +7,7 @@ export const prices = async (req, res) => {
   res.json(prices.data.reverse());
 };
 
-export const createSubscription = async (req, res) => {
+const createSubscription = async (req, res) => {
   // console.log(req.body);
   try {
     const user = await User.findById(req.user._id);
@@ -32,4 +32,44 @@ export const createSubscription = async (req, res) => {
   }
 };
 
-module.exports = {prices, createSubscription}
+const subscriptionStatus = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    const subscriptions = await stripe.subscriptions.list({
+      customer: user.stripe_customer_id,
+      status: "all",
+      expand: ["data.default_payment_method"],
+    });
+
+    const updated = await User.findByIdAndUpdate(
+      user._id,
+      {
+        subscriptions: subscriptions.data,
+      },
+      { new: true }
+    );
+
+    res.json(updated);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const subscriptions = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    const subscriptions = await stripe.subscriptions.list({
+      customer: user.stripe_customer_id,
+      status: "all",
+      expand: ["data.default_payment_method"],
+    });
+
+    res.json(subscriptions);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports = {prices, createSubscription, subscriptionStatus, subscriptions}

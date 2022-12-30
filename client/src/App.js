@@ -9,6 +9,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import "./App.css";
 import StripeSuccess from "./pages/success";
 import StripeCancel from "./pages/cancel";
+import Account from "./pages/Account";
 
 function App() {
 	return (
@@ -23,6 +24,7 @@ function App() {
 				<Route path="/login" element={<Login />} />
 				<Route path="/stripe/success" element={<StripeSuccess />} />
 				<Route path="/stripe/cancel" element={<StripeCancel />} />
+				<Route path="/account" element={<Account />} />
 			</Routes>
 		</>
 	);
